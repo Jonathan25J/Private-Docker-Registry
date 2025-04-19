@@ -1,0 +1,17 @@
+services:
+  registry:
+    image: registry:3.0
+    ports:
+      - 5000:5000
+    volumes:
+      - ./registry/data:/var/lib/registry
+      - ./registry/config/config.yml:/etc/distribution/config.yml
+      - ./registry/config/htpasswd:/etc/docker/registry/htpasswd
+  registry-ui:
+    image: joxit/docker-registry-ui:main
+    ports:
+      - 5001:80
+    environment:
+      - REGISTRY_TITLE=Private Docker Registry
+      - NGINX_PROXY_PASS_URL=http://registry:5000
+      - SINGLE_REGISTRY=true
