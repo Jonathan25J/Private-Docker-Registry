@@ -14,7 +14,7 @@ services:
     image: registry:3.0
     restart: unless-stopped
     ports:
-      - 5001:5000
+      - 5001:5001
     volumes:
       - ./registry/writeable/data:/var/lib/registry
       - ./registry/writeable/config/config.yml:/etc/distribution/config.yml
