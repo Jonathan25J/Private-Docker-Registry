@@ -1,0 +1,15 @@
+version: 0.1
+log:
+  fields:
+    service: registry-writeable
+storage:
+  delete:
+    enabled: true
+  filesystem:
+    rootdirectory: /var/lib/registry
+http:
+  addr: :5001
+auth:
+  htpasswd:
+    realm: Registry Realm
+    path: /etc/docker/registry/htpasswd

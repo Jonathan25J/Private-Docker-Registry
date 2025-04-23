@@ -1,17 +1,23 @@
 services:
-  registry:
+  registry-mirror:
     image: registry:3.0
+    restart: unless-stopped
     ports:
       - 5000:5000
     volumes:
-      - ./registry/data:/var/lib/registry
-      - ./registry/config/config.yml:/etc/distribution/config.yml
-      - ./registry/config/htpasswd:/etc/docker/registry/htpasswd
-  registry-ui:
-    image: joxit/docker-registry-ui:main
-    ports:
-      - 5001:80
+      - ./registry/mirror/data:/var/lib/registry
+      - ./registry/mirror/config/config.yml:/etc/distribution/config.yml
+      - ./registry/mirror/config/htpasswd:/etc/docker/registry/htpasswd
     environment:
-      - REGISTRY_TITLE=Private Docker Registry
-      - NGINX_PROXY_PASS_URL=http://registry:5000
-      - SINGLE_REGISTRY=true
+      - OTEL_TRACES_EXPORTER=none
+  registry-writeable:
+    image: registry:3.0
+    restart: unless-stopped
+    ports:
+      - 5001:5000
+    volumes:
+      - ./registry/writeable/data:/var/lib/registry
+      - ./registry/writeable/config/config.yml:/etc/distribution/config.yml
+      - ./registry/writeable/config/htpasswd:/etc/docker/registry/htpasswd
+    environment:
+      - OTEL_TRACES_EXPORTER=none
